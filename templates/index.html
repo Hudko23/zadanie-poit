@@ -1,0 +1,44 @@
+<!DOCTYPE HTML>
+<html>
+ <head>
+  <title>SEMAFOR MONITORING</title>
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.4.2.min.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.5/socket.io.min.js"></script>
+    <script src="{{ url_for('static', filename='script.js', version='asdasdas')}}"></script>
+    <style>
+      .semaphore {
+        height: 50px;
+        width: 50px;
+        border: 1px solid black;
+        border-radius: 50%;
+      }
+      
+      .semaphore--red {
+        background-color: red;
+      }
+      
+      .semaphore--green {
+        background-color: green;
+      }
+    
+    </style>
+ </head>
+ <body>
+  <h1>SEMAFOR MONITORING</h1>
+  <h2>Control:</h2>
+  <button id="beginEmissionButtonId">Connect</button>
+  <button id="endEmissionButtonId">Disconnect</button>
+  <button id="startLogButtonId">Start Monitoring</button>
+  <button id="stopLogButtonId">Stop Monitoring</button>
+  <h2>Emission status:</h2>
+  <div id="emissionId"></div>
+  <h2>Monitoring:</h2>
+  <div id="monitoiringId"></div>
+  <h2>Semaphore walker:</h2>
+  <div id="walkerSemaphoreId" class="semaphore"></div>
+  <h2>Semaphore car:</h2>
+  <div id="carSemaphoreId" class="semaphore"></div>
+  <h2>Receive:</h2>
+  <div id="logId"></div>
+ </body>
+</html>
