@@ -22,18 +22,27 @@ ser.baudrate=9600
 
 def background_thread(args):
     count = 0
-    startEmission = False 
-    print('It works!')
+    startEmission = False
+    file = open('monitoring.txt', 'w').close()
+    file = open('monitoring.txt', 'a')
+    
     while True:
         time.sleep(0.1)
         if args:
             print(args)
             startEmission = dict(args).get('START_EMISSION')
+            startStoring = dict(args).get('START_STORING')
             print('startEmission ' + str(startEmission))
-            if startEmission:
-                read_ser=ser.readline()
-                print(read_ser)
-                socketio.emit('semaphore_data', {'semaphoreState': read_ser}, namespace='/test')  
+            read_ser=ser.readline()
+            print(read_ser)
+            if startEmission == 'EMIT':
+                socketio.emit('semaphore_data', {'semaphoreState': read_ser}, namespace='/test')
+            if startStoring == 'STORE':
+                newLine = read_ser
+                file.write(newLine)
+                print('New line added: ' + newLine)
+                
+                
 
 @app.route('/')
 def index():
@@ -41,16 +50,25 @@ def index():
        
 @socketio.on('connect', namespace='/test')
 def handle_connect():
+    session['START_EMISSION'] = 'NOT_SET'
+    session['START_STORING'] = 'NOT_SET'
     global thread
     with thread_lock:
         if thread is None:
             thread = socketio.start_background_task(target=background_thread, args=session._get_current_object())
-    
+
+@socketio.on('set_storing', namespace='/test')
+def handle_storing(message):
+    print('set_storing')
+    print(message)
+    session['START_STORING'] = 'STORE' if message['value'] else 'NOT_SET'
+
+
 @socketio.on('set_emission_state', namespace='/test')
 def handle_emission_state(message):
     print('set_emission_state')
     print(message)
-    session['START_EMISSION'] = message['value']
+    session['START_EMISSION'] = 'EMIT' if message['value'] else 'NOT_SET'
 
 
 @socketio.on('disconnect', namespace='/test')

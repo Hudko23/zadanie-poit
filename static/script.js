@@ -1,4 +1,4 @@
-$(document).ready(function() {
+$(document).ready(() => {
 
 	const namespace = '/test';
 	const socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port + namespace);
@@ -26,6 +26,7 @@ $(document).ready(function() {
 
 	socket.on('semaphore_data', (msg) => {
 		const { semaphoreState } = msg;
+		const semaphoreStateWithoutNewLine = semaphoreState.trim();
 		
 		const CAR_RED = 'CarRed';
 		const CAR_GREEN = 'CarGreen';
@@ -35,21 +36,15 @@ $(document).ready(function() {
 		const semaphoreRedClass = 'semaphore--red';
 		const semaphoreGreenClass = 'semaphore--green';
 			
-		console.log('Received', msg);
+		console.log('Received', semaphoreStateWithoutNewLine);
 		if (shouldLog) {
-			switch(semaphoreState) {
+			switch(semaphoreStateWithoutNewLine) {
 				case CAR_RED: {
-					// walkerSemaphoreRef.removeClass(semaphoreRedClass);
-					// walkerSemaphoreRef.addClass(semaphoreGreenClass);
-					
 					carSemaphoreRef.removeClass(semaphoreGreenClass);
 					carSemaphoreRef.addClass(semaphoreRedClass);
 					break;
 				}
 				case CAR_GREEN: {
-					// walkerSemaphoreRef.removeClass(semaphoreGreenClass);
-					// walkerSemaphoreRef.addClass(semaphoreRedClass);
-					
 					carSemaphoreRef.removeClass(semaphoreRedClass);
 					carSemaphoreRef.addClass(semaphoreGreenClass);
 					break;
@@ -57,34 +52,30 @@ $(document).ready(function() {
 				case WALKER_RED: {
 					walkerSemaphoreRef.removeClass(semaphoreGreenClass);
 					walkerSemaphoreRef.addClass(semaphoreRedClass);
-					
-					// carSemaphoreRef.removeClass(semaphoreRedClass);
-					// carSemaphoreRef.addClass(semaphoreGreenClass);
 					break;
 				}
 				case WALKER_GREEN: {
 					walkerSemaphoreRef.removeClass(semaphoreRedClass);
 					walkerSemaphoreRef.addClass(semaphoreGreenClass);
-					
-					// carSemaphoreRef.removeClass(semaphoreRedClass);
-					// carSemaphoreRef.addClass(semaphoreGreenClass);
 					break;
 				}
 				default:
 					console.error('Unknown semaphore value');
 			
 			}
-			htmlLogContainer.append(`Semaphore state: ${semaphoreState} <br>`).html();
+			htmlLogContainer.append(`Semaphore state: ${semaphoreStateWithoutNewLine} <br>`).html();
 		}
 	});
 	
 	startLogButtonRef.click((event) => {
 		shouldLog = true;
+		socket.emit('set_storing', {value: true});
 		monitoiringRef.text('True');
 	});
 	
 	stopLogtButtonRef.click((event) => {
 		shouldLog = false;
+		socket.emit('set_storing', {value: false});
 		monitoiringRef.text('False');
 	});
 	
