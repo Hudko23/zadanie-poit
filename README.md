@@ -134,3 +134,47 @@ while True:
                 file.write(newLine)
                 print('New line added: ' + newLine)
 ```
+
+## Klient HTML
+Vyzualne spracovanie stranky.
+Nadpis:
+```html
+<h1>SEMAPHORE MONITORING</h1>
+```
+
+tlacidla:
+```html
+  <button id="beginEmissionButtonId">Connect</button>
+  <button id="endEmissionButtonId">Disconnect</button>
+  <button id="startLogButtonId">Start Monitoring</button>
+  <button id="stopLogButtonId">Stop Monitoring</button>
+```
+
+vypisovanie monotorovanych dat:
+```Html
+ <h2>Receive:</h2>
+  <div id="logId"></div>
+```
+
+nastavenie obrazkov pre semafor:
+```HTML
+.semaphore {
+        height: 50px;
+        width: 50px;
+        border: 1px solid black;
+        border-radius: 50%;
+      }
+      
+      .semaphore--red {
+        background-color: red;
+      }
+      
+      .semaphore--green {
+        background-color: lawngreen;
+      }
+
+<h2>Semaphore walker:</h2>
+  <div id="walkerSemaphoreId" class="semaphore"></div>
+  <h2>Semaphore car:</h2>
+  <div id="carSemaphoreId" class="semaphore"></div>
+```
