@@ -96,12 +96,15 @@ ser.baudrate=9600
 read_ser=ser.readline()
 ```
 
-Ak je poziadavka od klienta na pripojenie k serveru, tak (session[START_EMISSION]) sa nastavy na EMIT a vykona sa (while) cyklus.
+Vytvorý HTML stranku, ktorú vidí klient.
  ```python
 @app.route('/')
 def index():
     return render_template('index.html', async_mode=socketio.async_mode)
-     
+```
+
+Po otovrení stránky sa klient pripojí pomocou tejto metódy na server, a nasledne sa vytvorí nové vlákno na ktorom bude bežať  background_thread (pomocou tejto funkcie budeme posielat data z arduina spät na klienta)
+```python
 @socketio.on('connect', namespace='/test')
 def handle_connect():
     session['START_EMISSION'] = 'NOT_SET'
@@ -110,7 +113,10 @@ def handle_connect():
     with thread_lock:
         if thread is None:
             thread = socketio.start_background_task(target=background_thread, args=session._get_current_object())
+```
 
+Podľa požiadavky klienta spušťa dáta zo servera.
+```python
 @socketio.on('set_emission_state', namespace='/test')
 def handle_emission_state(message):
     print('set_emission_state')
@@ -185,7 +191,7 @@ Nastavenie semafora (zmena farieb, rozmer):
 
 ## Klient Script
 
-Nastavenie referenci, ktore vola klient:
+Inicializacia premenných:
 ```java script
     const beginEmissionButtonRef = $('#beginEmissionButtonId');
 	const endEmissionButtonRef = $('#endEmissionButtonId');
@@ -214,7 +220,7 @@ Nastavenie constant, ktore sa citaju z portu.
 		const WALKER_GREEN = 'WalkerGreen';
 ```
 
-Natavenie tried semaforov pre prikaz (case).
+Natavenie css tried semaforov pre prikaz (case).
 ```java script
 		const semaphoreRedClass = 'semaphore--red';
 		const semaphoreGreenClass = 'semaphore--green';
