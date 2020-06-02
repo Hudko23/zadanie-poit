@@ -75,3 +75,62 @@ void loop() {
       }      
 }
 ```
+
+## SemZadServer
+Vytvorenie noveho suboru a mazanie starych udajov.
+```python
+def background_thread(args):
+    count = 0
+    startEmission = False
+    file = open('monitoring.txt', 'w').close()
+    file = open('monitoring.txt', 'a')
+```
+
+Pripojenie a nacitavanie dat z portu.
+```python
+ser=serial.Serial("/dev/ttyUSB0",9600)
+ser.baudrate=9600
+read_ser=ser.readline()
+```
+
+Ak je poziadavka od klienta, tak sa nan pripoji.
+
+ ```python
+@app.route('/')
+def index():
+    return render_template('index.html', async_mode=socketio.async_mode)
+     
+@socketio.on('connect', namespace='/test')
+def handle_connect():
+    session['START_EMISSION'] = 'NOT_SET'
+    session['START_STORING'] = 'NOT_SET'
+    global thread
+    with thread_lock:
+        if thread is None:
+            thread = socketio.start_background_task(target=background_thread, args=session._get_current_object())
+
+@socketio.on('set_emission_state', namespace='/test')
+def handle_emission_state(message):
+    print('set_emission_state')
+    print(message)
+    session['START_EMISSION'] = 'EMIT' if message['value'] else 'NOT_SET'
+```
+
+Odosielanie dat na klienta a ukladanie do subora.
+```pythan
+while True:
+        time.sleep(0.1)
+        if args:
+            print(args)
+            startEmission = dict(args).get('START_EMISSION')
+            startStoring = dict(args).get('START_STORING')
+            print('startEmission ' + str(startEmission))
+            read_ser=ser.readline()
+            print(read_ser)
+            if startEmission == 'EMIT':
+                socketio.emit('semaphore_data', {'semaphoreState': read_ser}, namespace='/test')
+            if startStoring == 'STORE':
+                newLine = read_ser
+                file.write(newLine)
+                print('New line added: ' + newLine)
+```
