@@ -1,7 +1,8 @@
 # zadanie-poit
 
 ## arduino kod
-Nastavenie premennych a pinov.
+Nastavenie premennych a cisla pinov, kde su zapojene.
+Nastavenie (Stringov), ktore vypisuje na port.
 ```wiring
 int CarRed = 12;
 int CarYellow = 11;
@@ -33,7 +34,8 @@ void setup() {
     Serial.println(WalkerLightRed);     // vypisovanie na port
 }
 ```
-Prvy if sa spusti ked sa stlaci po stlaceni tlacidla.
+Prikaz (if a else if).
+Prvy if sa spusti po stlaceni tlacidla.
 Druhy else if sa spusti po zatieneni fotorezistora.
 ```wiring
 void loop() {
@@ -76,8 +78,9 @@ void loop() {
 }
 ```
 
+
 ## SemZadServer
-Vytvorenie noveho suboru a mazanie starych udajov.
+Vytvorenie noveho suboru a mazanie starych udajov zo suboru pri novom nacitani serveru.
 ```python
 def background_thread(args):
     count = 0
@@ -86,15 +89,14 @@ def background_thread(args):
     file = open('monitoring.txt', 'a')
 ```
 
-Pripojenie a nacitavanie dat z portu.
+Pripojenie na port a nasledne citanie dat z portu.
 ```python
 ser=serial.Serial("/dev/ttyUSB0",9600)
 ser.baudrate=9600
 read_ser=ser.readline()
 ```
 
-Ak je poziadavka od klienta, tak sa nan pripoji.
-
+Ak je poziadavka od klienta na pripojenie k serveru, tak (session[START_EMISSION]) sa nastavy na EMIT a vykona sa (while) cyklus.
  ```python
 @app.route('/')
 def index():
@@ -116,7 +118,7 @@ def handle_emission_state(message):
     session['START_EMISSION'] = 'EMIT' if message['value'] else 'NOT_SET'
 ```
 
-Odosielanie dat na klienta a ukladanie do subora.
+(While) cyklus, kotry odosiela data klientovi a zaroven ich uklada do subora.
 ```pythan
 while True:
         time.sleep(0.1)
@@ -135,14 +137,15 @@ while True:
                 print('New line added: ' + newLine)
 ```
 
+
 ## Klient HTML
-Vyzualne spracovanie stranky.
+Vizualne spracovanie stranky.
 Nadpis:
 ```html
 <h1>SEMAPHORE MONITORING</h1>
 ```
 
-tlacidla:
+Nastavenie tlacidiel:
 ```html
   <button id="beginEmissionButtonId">Connect</button>
   <button id="endEmissionButtonId">Disconnect</button>
@@ -150,13 +153,13 @@ tlacidla:
   <button id="stopLogButtonId">Stop Monitoring</button>
 ```
 
-vypisovanie monitorovanych dat:
+Vypisovanie monitorovanych dat:
 ```Html
  <h2>Receive:</h2>
   <div id="logId"></div>
 ```
 
-nastavenie obrazkov pre semafor:
+Nastavenie semafora (zmena farieb, rozmer):
 ```HTML
 .semaphore {
         height: 50px;
@@ -178,3 +181,80 @@ nastavenie obrazkov pre semafor:
   <h2>Semaphore car:</h2>
   <div id="carSemaphoreId" class="semaphore"></div>
 ```
+
+
+## Klient Script
+
+Nastavenie referenci, ktore vola klient:
+```java script
+    const beginEmissionButtonRef = $('#beginEmissionButtonId');
+	const endEmissionButtonRef = $('#endEmissionButtonId');
+	
+	const htmlLogContainer = $('#logId');
+	const startLogButtonRef = $('#startLogButtonId');
+	const stopLogtButtonRef = $('#stopLogButtonId');
+	const monitoiringRef = $('#monitoiringId');
+	const emissionRef = $('#emissionId');
+	const walkerSemaphoreRef = $('#walkerSemaphoreId');
+	const carSemaphoreRef = $('#carSemaphoreId');
+``` 
+
+Nastavenie pripojenia a monitoringu na hodnotu (False):
+```java script
+	let shouldLog = false;
+	monitoiringRef.text('False');
+	emissionRef.text('False');
+```
+
+Nastavenie constant, ktore sa citaju z portu.
+```java script
+		const CAR_RED = 'CarRed';
+		const CAR_GREEN = 'CarGreen';
+		const WALKER_RED = 'WalkerRed';
+		const WALKER_GREEN = 'WalkerGreen';
+```
+
+Natavenie tried semaforov pre prikaz (case).
+```java script
+		const semaphoreRedClass = 'semaphore--red';
+		const semaphoreGreenClass = 'semaphore--green';
+```
+
+Nacitanie dat pre semafor, odstranenie bielich znakov z nacitanych dat (ako napr. novy riadok) pomocou funkcie (trim).
+```java script
+	socket.on('semaphore_data', (msg) => {
+		const { semaphoreState } = msg;
+		const semaphoreStateWithoutNewLine = semaphoreState.trim();
+```
+
+Prepinanie farieb semaforov na stranke pomocou prikazu (case).
+```java script
+		console.log('Received', semaphoreStateWithoutNewLine);
+		if (shouldLog) {
+			switch(semaphoreStateWithoutNewLine) {
+				case CAR_RED: {
+					carSemaphoreRef.removeClass(semaphoreGreenClass);
+					carSemaphoreRef.addClass(semaphoreRedClass);
+					break;
+				}
+				case CAR_GREEN: {
+					carSemaphoreRef.removeClass(semaphoreRedClass);
+					carSemaphoreRef.addClass(semaphoreGreenClass);
+					break;
+				}
+				case WALKER_RED: {
+					walkerSemaphoreRef.removeClass(semaphoreGreenClass);
+					walkerSemaphoreRef.addClass(semaphoreRedClass);
+					break;
+				}
+				case WALKER_GREEN: {
+					walkerSemaphoreRef.removeClass(semaphoreRedClass);
+					walkerSemaphoreRef.addClass(semaphoreGreenClass);
+					break;
+				}
+				default:
+					console.error('Unknown semaphore value');
+			
+			}
+```
+
