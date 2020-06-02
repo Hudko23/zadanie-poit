@@ -1,8 +1,8 @@
 # zadanie-poit
 
 ## arduino kod
-Nastavenie premennych a cisla pinov, kde su zapojene.
-Nastavenie (Stringov), ktore vypisuje na port.
+Nastavenie premennych a čisel pinov, kde su zapojene.
+Nastavenie (Stringov), ktore sa vypisujú na port.
 ```wiring
 int CarRed = 12;
 int CarYellow = 11;
@@ -17,7 +17,7 @@ String WalkerLightRed = "WalkerRed";
 String WalkerLightGreen = "WalkerGreen";
 ```
 Nastavenie rychlosti portu.
-Nastavenie pinov na vstupy a vystupy.
+Nastavenie pinov na vstupy a výstupy.
 ```wiring
 void setup() {
     Serial.begin(9600);             //nastavenie rychlosti portu
@@ -40,7 +40,7 @@ Druhy else if sa spusti po zatieneni fotorezistora.
 ```wiring
 void loop() {
    int StatusButton = digitalRead(ButtonForWalker);         // nastavenie tlacidla na digitalRead
-   int StatusFotosensor = analogRead(FotosensorForCar);     // nastavenie gotorezistora na analogRead
+   int StatusFotosensor = analogRead(FotosensorForCar);     // nastavenie fotorezistora na analogRead
    
       if (StatusButton == HIGH) {           // spusti sa po stlaceni tlacidla
 
@@ -89,7 +89,7 @@ def background_thread(args):
     file = open('monitoring.txt', 'a')
 ```
 
-Pripojenie na port a nasledne citanie dat z portu.
+Pripojenie na port a nasledne čitanie dat z portu.
 ```python
 ser=serial.Serial("/dev/ttyUSB0",9600)
 ser.baudrate=9600
@@ -151,7 +151,7 @@ Nadpis:
 <h1>SEMAPHORE MONITORING</h1>
 ```
 
-Nastavenie tlacidiel:
+Nastavenie tlačidiel:
 ```html
   <button id="beginEmissionButtonId">Connect</button>
   <button id="endEmissionButtonId">Disconnect</button>
@@ -212,7 +212,7 @@ Nastavenie pripojenia a monitoringu na hodnotu (False):
 	emissionRef.text('False');
 ```
 
-Nastavenie constant, ktore sa citaju z portu.
+Nastavenie constant, ktore sa čitaju z portu.
 ```java script
 		const CAR_RED = 'CarRed';
 		const CAR_GREEN = 'CarGreen';
@@ -226,7 +226,7 @@ Natavenie css tried semaforov pre prikaz (case).
 		const semaphoreGreenClass = 'semaphore--green';
 ```
 
-Nacitanie dat pre semafor, odstranenie bielich znakov z nacitanych dat (ako napr. novy riadok) pomocou funkcie (trim).
+Načitanie dát pre semafor, odstranenie bielich znakov z načitanych dát (ako napr. novy riadok) pomocou funkcie (trim).
 ```java script
 	socket.on('semaphore_data', (msg) => {
 		const { semaphoreState } = msg;
