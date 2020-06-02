@@ -150,7 +150,7 @@ tlacidla:
   <button id="stopLogButtonId">Stop Monitoring</button>
 ```
 
-vypisovanie monotorovanych dat:
+vypisovanie monitorovanych dat:
 ```Html
  <h2>Receive:</h2>
   <div id="logId"></div>
