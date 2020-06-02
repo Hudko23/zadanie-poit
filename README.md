@@ -1,6 +1,7 @@
 # zadanie-poit
 
 ## arduino kod
+Nastavenie premennych a pinov.
 ```wiring
 int CarRed = 12;
 int CarYellow = 11;
@@ -14,8 +15,8 @@ String CarLightGreen = "CarGreen";
 String WalkerLightRed = "WalkerRed";
 String WalkerLightGreen = "WalkerGreen";
 ```
-Nastavenie premennych a pinov.
-
+Nastavenie rychlosti portu.
+Nastavenie pinov na vstupy a vzstupy.
 ```wiring
 void setup() {
     Serial.begin(9600);
@@ -32,9 +33,8 @@ void setup() {
     Serial.println(WalkerLightRed);
 }
 ```
-Nastavenie rychlosti portu
-Nastavenie pinov na vstupy a vzstupy
-
+Prvy if sa spusti ked sa stlaci po stlaceni tlacidla.
+Druhy else if sa spusti po zatieneni fotorezistora.
 ```wiring
 void loop() {
    int StatusButton = digitalRead(ButtonForWalker);
@@ -75,5 +75,3 @@ void loop() {
       }      
 }
 ```
-Prvy if sa spusti ked sa stlaci po stlaceni tlacidla
-Druhy else if sa spusti po zatieneni fotorezistora
